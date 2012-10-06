@@ -58,7 +58,7 @@ public class HeartCheckerActivityTest extends
 						.getText().toString(), is("3"));
 	}
 
-	// スクリーンのロックを解除してから実行すること
+	// スクリーンのロックを解除してから実行すること！
 	@SmallTest
 	public void testOnHeartButtonClickHappyButton() throws Exception {
 		Button happyButton = (Button) activity.findViewById(si.heartchecker.R.id.happy_button);
@@ -69,7 +69,7 @@ public class HeartCheckerActivityTest extends
 						.getText().toString(), is("1"));
 	}
 
-	// スクリーンのロックを解除してから実行すること
+	// スクリーンのロックを解除してから実行すること！
 		@SmallTest
 		public void testOnHeartButtonClickSadButton() throws Exception {
 			Button happyButton = (Button) activity.findViewById(si.heartchecker.R.id.sad_button);
