@@ -71,7 +71,7 @@ public class HeartCheckerActivityTest extends
 
 	// スクリーンのロックを解除してから実行すること
 		@SmallTest
-		public void testOnHeartOnClickSadButton() throws Exception {
+		public void testOnHeartButtonClickSadButton() throws Exception {
 			Button happyButton = (Button) activity.findViewById(si.heartchecker.R.id.sad_button);
 			TouchUtils.clickView(this, happyButton);
 
