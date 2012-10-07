@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 
 import si.heartchecker.*;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.TouchUtils;
 import android.test.suitebuilder.annotation.SmallTest;
@@ -24,14 +25,26 @@ public class HeartCheckerActivityTest extends
 	protected void setUp() throws Exception {
 		super.setUp();
 		activity = getActivity();
+	}
 
+	public void dbSetup() {
 		CreateHeartLogHelper helper = new CreateHeartLogHelper(activity);
-		TestDataSetUpper testDataSetUpper = new TestDataSetUpper(helper);
-		testDataSetUpper.insert0123();
+		SQLiteDatabase db = helper.getWritableDatabase();
+		TestDataSetUpper testDataSetUpper = new TestDataSetUpper(db);
+		try {
+			db.beginTransaction();
+			testDataSetUpper.deleteAll();
+			testDataSetUpper.insert0123();
+			db.setTransactionSuccessful();
+			db.endTransaction();
+		} finally {
+			db.close();
+		}
 	}
 
 	@SmallTest
 	public void testOnCreateInitialHappyCount() throws Exception {
+		dbSetup();
 		assertThat(
 				((TextView) activity.findViewById(si.heartchecker.R.id.happy_count))
 						.getText().toString(), is("0"));
@@ -39,6 +52,7 @@ public class HeartCheckerActivityTest extends
 
 	@SmallTest
 	public void testOnCreateInitialSadCount() throws Exception {
+		dbSetup();
 		assertThat(
 				((TextView) activity.findViewById(si.heartchecker.R.id.sad_count))
 						.getText().toString(), is("1"));
@@ -46,6 +60,7 @@ public class HeartCheckerActivityTest extends
 
 	@SmallTest
 	public void testOnCreateInitialAngryCount() throws Exception {
+		dbSetup();
 		assertThat(
 				((TextView) activity.findViewById(si.heartchecker.R.id.angry_count))
 						.getText().toString(), is("2"));
@@ -53,6 +68,7 @@ public class HeartCheckerActivityTest extends
 
 	@SmallTest
 	public void testOnCreateInitialDokiDokiCount() throws Exception {
+		dbSetup();
 		assertThat(
 				((TextView) activity.findViewById(si.heartchecker.R.id.dokidoki_count))
 						.getText().toString(), is("3"));
@@ -61,7 +77,9 @@ public class HeartCheckerActivityTest extends
 	// スクリーンのロックを解除してから実行すること！
 	@SmallTest
 	public void testOnHeartButtonClickHappyButton() throws Exception {
-		Button happyButton = (Button) activity.findViewById(si.heartchecker.R.id.happy_button);
+		dbSetup();
+		Button happyButton = (Button) activity
+				.findViewById(si.heartchecker.R.id.happy_button);
 		TouchUtils.clickView(this, happyButton);
 
 		assertThat(
@@ -70,14 +88,41 @@ public class HeartCheckerActivityTest extends
 	}
 
 	// スクリーンのロックを解除してから実行すること！
-		@SmallTest
-		public void testOnHeartButtonClickSadButton() throws Exception {
-			Button happyButton = (Button) activity.findViewById(si.heartchecker.R.id.sad_button);
-			TouchUtils.clickView(this, happyButton);
+	@SmallTest
+	public void testOnHeartButtonClickSadButton() throws Exception {
+		dbSetup();
+		Button sadButton = (Button) activity
+				.findViewById(si.heartchecker.R.id.sad_button);
+		TouchUtils.clickView(this, sadButton);
 
-			assertThat(
-					((TextView) activity.findViewById(si.heartchecker.R.id.sad_count))
-							.getText().toString(), is("2"));
-		}
+		assertThat(
+				((TextView) activity.findViewById(si.heartchecker.R.id.sad_count))
+						.getText().toString(), is("2"));
+	}
 
+	// スクリーンのロックを解除してから実行すること！
+	@SmallTest
+	public void testOnHeartButtonClickAngryButton() throws Exception {
+		dbSetup();
+		Button angryButton = (Button) activity
+				.findViewById(si.heartchecker.R.id.angry_button);
+		TouchUtils.clickView(this, angryButton);
+
+		assertThat(
+				((TextView) activity.findViewById(si.heartchecker.R.id.angry_count))
+						.getText().toString(), is("3"));
+	}
+
+	// スクリーンのロックを解除してから実行すること！
+	@SmallTest
+	public void testOnHeartButtonClickDokidokiButton() throws Exception {
+		dbSetup();
+		Button dokidokiButton = (Button) activity
+				.findViewById(si.heartchecker.R.id.dokidoki_button);
+		TouchUtils.clickView(this, dokidokiButton);
+
+		assertThat(
+				((TextView) activity.findViewById(si.heartchecker.R.id.dokidoki_count))
+						.getText().toString(), is("4"));
+	}
 }

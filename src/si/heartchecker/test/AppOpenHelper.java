@@ -20,13 +20,14 @@ public class AppOpenHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		try {
-            String sql = "create table HeartLog(" + "Time text primary key,"
-                    + "HeartType text not null)";
+			String sql = "create table HeartLog(" + "Time text primary key,"
+					+ "HeartType text not null)";
 
-            db.execSQL(sql);
-        } catch (Exception e) {
-            Log.e("ERROR", e.toString());
-        }	}
+			db.execSQL(sql);
+		} catch (Exception e) {
+			Log.e("ERROR", e.toString());
+		}
+	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
